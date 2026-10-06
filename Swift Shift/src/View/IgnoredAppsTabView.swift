@@ -72,6 +72,7 @@ struct IgnoredAppsTabView: View {
       Text("System apps like Notification Center are always ignored.")
         .font(.system(size: 10))
         .foregroundStyle(.quaternary)
+        .fixedSize(horizontal: false, vertical: true)
     }
     .padding(14)
     .onAppear { loadApps() }

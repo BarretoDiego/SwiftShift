@@ -127,7 +127,7 @@ private final class FnShortcutRecorderControl: NSButton {
     isRecordingShortcut = true
     recordedModifierFlags = []
     recordedModifierKeyCodes = []
-    title = "Press shortcut"
+    title = LanguageManager.localized("Press shortcut")
     state = .on
     window?.makeFirstResponder(self)
     needsDisplay = true
@@ -152,7 +152,7 @@ private final class FnShortcutRecorderControl: NSButton {
   }
 
   private func updateTitle() {
-    title = shortcut?.displayString ?? "Record Shortcut"
+    title = shortcut?.displayString ?? LanguageManager.localized("Record Shortcut")
   }
 }
 
@@ -234,7 +234,7 @@ struct ShortcutFnWarningView: View {
 }
 
 private struct TriggerToggleButton: View {
-  let title: String
+  let title: LocalizedStringKey
   let icon: String
   let isOn: Bool
   let canTurnOff: Bool
@@ -263,7 +263,7 @@ private struct TriggerToggleButton: View {
     .buttonStyle(.plain)
     .foregroundStyle(isFlashingError ? .red : (isOn ? .teal : .secondary))
     .animation(.easeInOut(duration: 0.18), value: isFlashingError)
-    .help(isOn && !canTurnOff ? "At least one trigger is required" : "")
+    .help(isOn && !canTurnOff ? Text("At least one trigger is required") : Text(verbatim: ""))
   }
 
   private var triggerBackgroundColor: Color {
@@ -302,7 +302,7 @@ struct ShortcutView: View {
           .foregroundStyle(.tint)
           .frame(width: 22)
 
-        Text(shortcut.type.rawValue)
+        Text(LocalizedStringKey(shortcut.type.rawValue))
           .font(.system(size: 15, weight: .semibold))
       }
 
@@ -420,6 +420,7 @@ struct ShortcutView: View {
     ) {
       ForEach([MouseButton.left, .right], id: \.self) { mouseButton in
         let selected = isMouseButtonSelected(mouseButton)
+        let buttonName = LanguageManager.localized(mouseButton.rawValue)
         Button {
           var leftSelected = isMouseButtonSelected(.left)
           var rightSelected = isMouseButtonSelected(.right)
@@ -438,7 +439,7 @@ struct ShortcutView: View {
           HStack(spacing: 3) {
             Image(systemName: clickIcon(mouseButton))
               .font(.system(size: 9))
-            Text(mouseButton.rawValue)
+            Text(buttonName)
               .font(.system(size: 10, weight: selected ? .semibold : .regular))
           }
           .frame(maxWidth: .infinity)
@@ -452,10 +453,10 @@ struct ShortcutView: View {
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity)
         .foregroundStyle(selected ? .teal : .secondary)
-        .accessibilityLabel("\(mouseButton.rawValue) mouse button")
-        .accessibilityValue(selected ? "On" : "Off")
+        .accessibilityLabel("\(buttonName) mouse button")
+        .accessibilityValue(selected ? Text("On") : Text("Off"))
         .accessibilityAddTraits(selected ? .isSelected : [])
-        .help(mouseButton.rawValue)
+        .help(buttonName)
       }
     }
   }
@@ -480,7 +481,7 @@ struct ShortcutView: View {
   private func setMouseButtonSelection(left: Bool, right: Bool) {
     if !shortcut.keyboardEnabled {
       guard left && right else {
-        showTriggerError("Mouse-only shortcuts require both mouse buttons", on: .mouse)
+        showTriggerError(LanguageManager.localized("Mouse-only shortcuts require both mouse buttons"), on: .mouse)
         return
       }
 
@@ -552,7 +553,7 @@ struct ShortcutView: View {
   }
 
   private func showTriggerConflict(on trigger: TriggerKind) {
-    showTriggerError("You cannot use the same trigger for both actions", on: trigger)
+    showTriggerError(LanguageManager.localized("You cannot use the same trigger for both actions"), on: trigger)
   }
 
   private func showTriggerError(_ message: String, on trigger: TriggerKind) {

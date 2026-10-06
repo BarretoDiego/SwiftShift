@@ -64,6 +64,37 @@ final class PreferencesManagerTests: XCTestCase {
         XCTAssertTrue(PreferencesManager.loadBool(for: .bringToFront))
     }
 
+    // MARK: - Language
+
+    func testAvailableLanguages_includesShippedTranslations() {
+        let languages = LanguageManager.availableLanguages
+        XCTAssertTrue(languages.contains("en"))
+        XCTAssertTrue(languages.contains("pt-BR"))
+        XCTAssertFalse(languages.contains("Base"))
+    }
+
+    func testResolvedLanguage_usesSelectionWhenAvailable() {
+        XCTAssertEqual(LanguageManager.resolvedLanguage(for: "pt-BR"), "pt-BR")
+        XCTAssertEqual(LanguageManager.resolvedLanguage(for: "en"), "en")
+    }
+
+    func testResolvedLanguage_fallsBackForSystemOrUnknownSelection() {
+        let languages = LanguageManager.availableLanguages
+        XCTAssertTrue(languages.contains(LanguageManager.resolvedLanguage(for: LanguageManager.systemLanguage)))
+        XCTAssertTrue(languages.contains(LanguageManager.resolvedLanguage(for: "xx-unknown")))
+    }
+
+    func testLocalized_followsSelection() {
+        XCTAssertEqual(LanguageManager.localized("Shortcuts", selection: "pt-BR"), "Atalhos")
+        XCTAssertEqual(LanguageManager.localized("Shortcuts", selection: "en"), "Shortcuts")
+        XCTAssertEqual(LanguageManager.localized("Not a real key", selection: "pt-BR"), "Not a real key")
+    }
+
+    func testDisplayName_usesLanguageOwnName() {
+        XCTAssertEqual(LanguageManager.displayName(for: "en"), "English")
+        XCTAssertEqual(LanguageManager.displayName(for: "pt-BR"), "Português (Brasil)")
+    }
+
     // MARK: - Ignored Apps
 
     func testGetIgnoredApps_includesSystemApps() {

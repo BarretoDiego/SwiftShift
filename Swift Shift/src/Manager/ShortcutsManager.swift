@@ -88,7 +88,7 @@ struct KeyboardShortcut: Codable, Equatable {
       parts.append(Self.displayString(forKeyCode: keyCode, charactersIgnoringModifiers: charactersIgnoringModifiers))
     }
 
-    return parts.isEmpty ? "Record Shortcut" : parts.joined()
+    return parts.isEmpty ? LanguageManager.localized("Record Shortcut") : parts.joined()
   }
 
   init(keyCode: UInt16?, modifierFlags: NSEvent.ModifierFlags, characters: String? = nil, charactersIgnoringModifiers: String? = nil) {

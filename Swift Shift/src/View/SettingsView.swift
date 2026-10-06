@@ -3,7 +3,7 @@ import ShortcutRecorder
 import Sparkle
 
 struct SectionHeader: View {
-  let title: String
+  let title: LocalizedStringKey
   let icon: String
 
   var body: some View {
