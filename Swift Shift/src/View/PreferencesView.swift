@@ -3,8 +3,8 @@ import LaunchAtLogin
 
 struct PreferenceToggle: View {
   @Binding var isOn: Bool
-  let title: String
-  let subtitle: String
+  let title: LocalizedStringKey
+  let subtitle: LocalizedStringKey
   let icon: String
 
   var body: some View {
@@ -37,6 +37,7 @@ struct PreferencesView: View {
   @AppStorage(PreferenceKey.bringToFront.rawValue) private var bringToFront = false
   @AppStorage(PreferenceKey.useQuadrants.rawValue) private var useQuadrants = false
   @AppStorage(PreferenceKey.snapToWindows.rawValue) private var snapToWindows = true
+  @AppStorage(PreferenceKey.appLanguage.rawValue) private var appLanguage = LanguageManager.systemLanguage
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -89,6 +90,29 @@ struct PreferencesView: View {
         subtitle: "Add resistance near window edges",
         icon: "macwindow.on.rectangle"
       )
+
+      HStack(spacing: 8) {
+        Image(systemName: "globe")
+          .font(.system(size: 13))
+          .foregroundStyle(.tint)
+          .frame(width: 18)
+        Text("Language")
+          .font(.system(size: 12, weight: .medium))
+        Spacer()
+        Picker("", selection: $appLanguage) {
+          Text(verbatim: LanguageManager.localized("System", selection: appLanguage))
+            .tag(LanguageManager.systemLanguage)
+          Divider()
+          ForEach(LanguageManager.availableLanguages, id: \.self) { language in
+            Text(verbatim: LanguageManager.displayName(for: language)).tag(language)
+          }
+        }
+        .pickerStyle(.menu)
+        .controlSize(.small)
+        .labelsHidden()
+        .fixedSize()
+      }
+      .frame(minHeight: 32)
     }
   }
 }

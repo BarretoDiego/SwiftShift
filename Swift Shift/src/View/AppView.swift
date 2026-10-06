@@ -18,6 +18,7 @@ enum Tab: String, CaseIterable {
 
 struct AppView: View {
   @State private var selectedTab: Tab = .settings
+  @AppStorage(PreferenceKey.appLanguage.rawValue) private var appLanguage = LanguageManager.systemLanguage
 
   var body: some View {
     VStack(spacing: 0) {
@@ -33,7 +34,7 @@ struct AppView: View {
               Image(systemName: tab.icon)
                 .font(.system(size: 12, weight: .medium))
               if selectedTab == tab {
-                Text(tab.rawValue)
+                Text(LocalizedStringKey(tab.rawValue))
                   .font(.system(size: 11, weight: .semibold))
                   .lineLimit(1)
                   .fixedSize()
@@ -74,6 +75,9 @@ struct AppView: View {
       .transition(.opacity.combined(with: .move(edge: .bottom)))
     }
     .frame(width: MAIN_WINDOW_WIDTH)
+    .environment(\.locale, LanguageManager.locale(for: appLanguage))
+    // Rebuild on language change so AppKit-backed titles pick it up too
+    .id(appLanguage)
   }
 }
 

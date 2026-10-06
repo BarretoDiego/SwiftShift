@@ -29,6 +29,7 @@ There are several ways:
 * Bring window to front (without focusing it)
 * Smart resizing with quadrants
 * Ignore custom apps
+* Available in English and Brazilian Portuguese, switchable from the settings
 
 ### Quadrants
 
@@ -55,6 +56,11 @@ cd www
 bun install
 bun run dev
 ```
+
+### Translations
+
+All UI strings live in `Swift Shift/Localizable.xcstrings`. To add a language, open that file in Xcode, add the language
+and translate the strings. It will show up in the language picker automatically, no code changes needed.
 
 ### Accessibility permissions running locally
 

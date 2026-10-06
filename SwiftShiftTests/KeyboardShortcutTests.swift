@@ -136,7 +136,7 @@ final class KeyboardShortcutTests: XCTestCase {
 
     func testDisplayString_whenEmpty_returnsRecordShortcut() {
         let shortcut = KeyboardShortcut(keyCode: nil, modifierFlags: [])
-        XCTAssertEqual(shortcut.displayString, "Record Shortcut")
+        XCTAssertEqual(shortcut.displayString, LanguageManager.localized("Record Shortcut"))
     }
 
     func testDisplayString_forSpaceCharacter() {
